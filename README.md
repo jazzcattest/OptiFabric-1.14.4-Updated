@@ -1,3 +1,10 @@
+## Important:
+
+This fork of optifabric is solely meant to update the 1.14.4 release to properly work with connected textures and the latest Fabric API and Loader.
+I've used code and fixes from later versions of the [official OptiFabric](https://github.com/Chocohead/OptiFabric) to patch this version.
+
+The reason for wanting to update the 1.14.4 release is because there are certain texture packs that rely on 1x1 biomes, which are no longer supported on Minecraft 1.15+.
+
 # OptiFabric
 
 ![](https://ss.modmuss50.me/javaw_2019-05-22_20-33-34.jpg)
@@ -8,7 +15,7 @@ __Note:__ This project does not contain Optifine, you must download it separatel
 
 ## Installing
 
-After installing fabric for 1.14.3, you will need to place the OptiFabric mod jar as well as the optifine installer in the mods folder.
+After installing fabric for 1.14.4, you will need to place the OptiFabric mod jar as well as the optifine installer in the mods folder.
 
 Fabric Loader should be the latest version from the [Fabric Website](https://fabricmc.net/use/)
 
@@ -16,14 +23,15 @@ If you need more help you can read a more detailed guide [here](https://github.c
 
 
 ## Links
+### [Updated 1.14.4 OptiFabric Download](https://github.com/Sjouwer/OptiFabric/releases)
 
-### [OptiFabric Downloads](https://minecraft.curseforge.com/projects/optifabric)
+### [All other and official OptiFabric Downloads](https://minecraft.curseforge.com/projects/optifabric)
 
 ### [Optifine Download](https://optifine.net/downloads)
 
 ## Issues
 
-If you happen to find an issue and you believe it is to do with OptiFabric and not Optifine or a mod please open an issue [here](https://github.com/modmuss50/OptiFabric/issues) 
+If you happen to find an issue and you believe it is to do with this specific version of OptiFabric and not the official Optifabric, Optifine or a mod please open an issue [here](https://github.com/Sjouwer/OptiFabric/issues) 
 
 
 ## For Mod Devs
