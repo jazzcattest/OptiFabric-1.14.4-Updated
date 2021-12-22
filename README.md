@@ -1,29 +1,38 @@
-# OptiFabric
+## Important
+
+This fork of OptiFabric is solely meant to update the 1.14.4 release to properly work with connected textures, the latest [1.14 Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api/files/all?filter-game-version=1738749986%3A64806) and the latest [Fabric Loader](https://fabricmc.net/use/installer/).
+I've used code and fixes from later versions of the [official OptiFabric](https://github.com/Chocohead/OptiFabric) to patch this version.  
+
+Full credit goes to [modmuss50](https://github.com/modmuss50) for creating OptiFabric and [Chocohead](https://github.com/Chocohead) for maintaining it, without them this wouldn't have been possible.
+
+__Note:__ This project is not related or supported by either Fabric or OptiFine.  
+__Note:__ This project does not contain OptiFine, you must download it separately!
+
+# OptiFabric 1.14.4 Updated [![GitHub Releases](https://img.shields.io/github/downloads/Sjouwer/Optifabric-1.14.4-Updated/total)](https://github.com/Sjouwer/OptiFabric-1.14.4-Updated/releases)
+- [Officially approved](https://www.minecraftspeedrunning.com/public-resources/mods) for 1.14.4 speedrunning as long as it's used without Fabric API  
+- Works great with texture packs that rely on 1x1 biomes, which are no longer supported on Minecraft 1.15+
 
 ![](https://ss.modmuss50.me/javaw_2019-05-22_20-33-34.jpg)
 
-__Note:__ This project is not related or supported by either Fabric or Optifine.
-
-__Note:__ This project does not contain Optifine, you must download it separately!
-
 ## Installing
 
-After installing fabric for 1.14.3, you will need to place the OptiFabric mod jar as well as the optifine installer in the mods folder.
+After installing Fabric for 1.14.4, you will need to place the OptiFabric mod jar as well as the OptiFine installer in the mods folder.
 
-Fabric Loader should be the latest version from the [Fabric Website](https://fabricmc.net/use/)
+Fabric Loader should be the latest version from the [Fabric Website](https://fabricmc.net/use/installer/)
 
 If you need more help you can read a more detailed guide [here](https://github.com/modmuss50/OptiFabric/wiki/Install-Tutorial)
 
 
 ## Links
+### [Updated 1.14.4 OptiFabric Download](https://github.com/Sjouwer/OptiFabric/releases)
 
-### [OptiFabric Downloads](https://minecraft.curseforge.com/projects/optifabric)
+### [All other and official OptiFabric Downloads](https://minecraft.curseforge.com/projects/optifabric)
 
-### [Optifine Download](https://optifine.net/downloads)
+### [OptiFine Download](https://optifine.net/downloads)
 
 ## Issues
 
-If you happen to find an issue and you believe it is to do with OptiFabric and not Optifine or a mod please open an issue [here](https://github.com/modmuss50/OptiFabric/issues) 
+If you happen to find an issue and you believe it is to do with this specific version of OptiFabric and not the official OptiFabric, OptiFine or a mod please open an issue [here](https://github.com/Sjouwer/OptiFabric/issues) 
 
 
 ## For Mod Devs
@@ -36,13 +45,7 @@ repositories {
 }
 
 dependencies {
-    modCompile 'com.github.modmuss50:OptiFabric:e1834b016f'
-
-    //Deps required for optifabric
-    compile 'org.zeroturnaround:zt-zip:1.13'
-    compile ('net.fabricmc:stitch:0.2.1.61') {
-        transitive = false
-    }
+    modCompile 'com.github.Sjouwer:OptiFabric-1.14.4-Updated:v0.7.3'
 } 
 ```
 
@@ -53,8 +56,6 @@ Class export can be enabled using the following VM Option, this will extract the
 `-Doptifabric.extract=true`
 
 ## Screenshots
-
-Feel free to open a PR with more screenshots.
 
 ![](https://ss.modmuss50.me/javaw_2019-05-22_20-36-25.jpg)
 
