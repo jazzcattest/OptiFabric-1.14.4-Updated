@@ -5,15 +5,15 @@ import me.modmuss50.optifabric.patcher.LambadaRebuiler;
 import me.modmuss50.optifabric.patcher.PatchSplitter;
 import me.modmuss50.optifabric.patcher.RemapUtils;
 import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.impl.launch.MappingConfiguration;
+import net.fabricmc.loader.impl.launch.knot.Knot;
+import net.fabricmc.loader.impl.util.UrlConversionException;
+import net.fabricmc.loader.impl.util.UrlUtil;
 import net.fabricmc.loader.launch.common.FabricLauncher;
 import net.fabricmc.loader.launch.common.FabricLauncherBase;
-import net.fabricmc.loader.launch.common.MappingConfiguration;
-import net.fabricmc.loader.launch.knot.Knot;
-import net.fabricmc.loader.util.UrlConversionException;
-import net.fabricmc.loader.util.UrlUtil;
-import net.fabricmc.loader.util.mappings.TinyRemapperMappingsHelper;
-import net.fabricmc.mapping.reader.v2.TinyMetadata;
 import net.fabricmc.mapping.tree.ClassDef;
+import net.fabricmc.mapping.tree.FieldDef;
+import net.fabricmc.mapping.tree.MethodDef;
 import net.fabricmc.mapping.tree.TinyTree;
 import net.fabricmc.tinyremapper.IMappingProvider;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -26,21 +26,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class OptifineSetup {
 
-	private File workingDir = new File(FabricLoader.getInstance().getGameDirectory(), ".optifine");
+	private File workingDir = new File(String.valueOf(FabricLoader.getInstance().getGameDir()), ".optifine");
 	private File versionDir;
 	private MappingConfiguration mappingConfiguration = new MappingConfiguration();
 
@@ -172,6 +172,8 @@ public class OptifineSetup {
 
 	//Optifine currently has two fields that match the same name as Yarn mappings, we'll rename Optifine's to something else
 	IMappingProvider createMappings(String from, String to) {
+		TinyTree normalMappings = FabricLauncherBase.getLauncher().getMappingConfiguration().getMappings();
+
 		//In dev
 		if (fabricLauncher.isDevelopment()) {
 			try {
@@ -189,34 +191,29 @@ public class OptifineSetup {
 		}
 
 		//In prod
-		TinyTree mappingsNew = new TinyTree() {
-			private final TinyTree mappings = mappingConfiguration.getMappings();
+		return (out) -> {
+			for (ClassDef classDef : normalMappings.getClasses()) {
+				String className = classDef.getName(from);
+				out.acceptClass(className, classDef.getName(to));
 
-			@Override
-			public TinyMetadata getMetadata() {
-				return mappings.getMetadata();
-			}
+				for (FieldDef field : classDef.getFields()) {
+					out.acceptField(new IMappingProvider.Member(className, field.getName(from), field.getDescriptor(from)), field.getName(to));
+				}
 
-			@Override
-			public Map<String, ClassDef> getDefaultNamespaceClassMap() {
-				return mappings.getDefaultNamespaceClassMap();
-			}
-
-			@Override
-			public Collection<ClassDef> getClasses() {
-				return mappings.getClasses();
+				for (MethodDef method : classDef.getMethods()) {
+					out.acceptMethod(new IMappingProvider.Member(className, method.getName(from), method.getDescriptor(from)), method.getName(to));
+				}
 			}
 		};
-		return TinyRemapperMappingsHelper.create(mappingsNew, from, to);
 	}
 
 	//Gets the minecraft librarys
 	List<Path> getLibs() {
 		return fabricLauncher.getLoadTimeDependencies().stream().map(url -> {
 			try {
-				return UrlUtil.asPath(url);
-			} catch (UrlConversionException e) {
-				throw new RuntimeException(e);
+				return Paths.get(url.toURI());
+			} catch (URISyntaxException e) {
+				throw new RuntimeException("Failed to convert " + url + " to path", e);
 			}
 		}).filter(Files::exists).collect(Collectors.toList());
 	}
@@ -280,7 +277,7 @@ public class OptifineSetup {
 				Path classSourceFile = UrlUtil.asPath(urlSource);
 
 				return Optional.of(classSourceFile);
-			} catch (UrlConversionException e) {
+			} catch (UrlConversionException | URISyntaxException e) {
 				// TODO: Point to a logger
 				e.printStackTrace();
 			}
