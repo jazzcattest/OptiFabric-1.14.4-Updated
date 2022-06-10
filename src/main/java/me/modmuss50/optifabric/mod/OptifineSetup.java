@@ -262,11 +262,10 @@ public class OptifineSetup {
 		URL url;
 		if ((url = loader.getResource(filename)) != null) {
 			try {
-				URL urlSource = UrlUtil.getSource(filename, url);
-				Path classSourceFile = UrlUtil.asPath(urlSource);
+				Path classSourceFile = UrlUtil.getCodeSource(url, filename);
 
 				return Optional.of(classSourceFile);
-			} catch (UrlConversionException | URISyntaxException e) {
+			} catch (UrlConversionException e) {
 				// TODO: Point to a logger
 				e.printStackTrace();
 			}
