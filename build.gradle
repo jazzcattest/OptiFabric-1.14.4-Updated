@@ -1,24 +1,18 @@
 buildscript {
 	repositories {
+		jcenter()
 		maven {
 			name = 'Fabric'
 			url = 'https://maven.fabricmc.net/'
 		}
-		mavenCentral()
-		maven {
-			name = "Jitpack"
-			url 'https://jitpack.io/'
-		}
 	}
 	dependencies {
-		classpath "net.fabricmc:fabric-loom:0.12-SNAPSHOT"
+		classpath "net.fabricmc:fabric-loom:0.2.6-SNAPSHOT"
 	}
 }
 
-plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
-	id 'maven-publish'
-}
+apply plugin: net.fabricmc.loom.LoomGradlePlugin
+apply plugin: 'maven-publish'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
@@ -29,18 +23,30 @@ group = project.maven_group
 
 repositories {
 	mavenCentral()
+	maven {
+		name "Modmuss50 Repository"
+		url 'https://maven.fabricmc.net/'
+	}
 	maven { url 'https://jitpack.io' }
 }
 
 dependencies {
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
 	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	modCompile "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	modCompile "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+	
+	modCompile "com.github.modmuss50:Fabric-ASM:${project.fabric_asm_version}"
+	include "com.github.modmuss50:Fabric-ASM:${project.fabric_asm_version}"
 
-	modImplementation "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
-	include "com.github.Chocohead:Fabric-ASM:${project.fabric_asm_version}"
+	//Used to handle the zip processing
+	compile "org.zeroturnaround:zt-zip:${project.zt_zip_version}"
+	include "org.zeroturnaround:zt-zip:${project.zt_zip_version}"
+
+	//Required for zt-zip, kinda annoying
+	include "org.slf4j:slf4j-simple:${project.slf4j_version}"
+	include "org.slf4j:slf4j-api:${project.slf4j_version}"
 }
 
 task unzip(type: Copy) {
@@ -58,8 +64,13 @@ task unzip(type: Copy) {
 processResources {
 	inputs.property "version", project.version
 
-	filesMatching("fabric.mod.json") {
+	from(sourceSets.main.resources.srcDirs) {
+		include "fabric.mod.json"
 		expand "version": project.version
+	}
+
+	from(sourceSets.main.resources.srcDirs) {
+		exclude "fabric.mod.json"
 	}
 }
 

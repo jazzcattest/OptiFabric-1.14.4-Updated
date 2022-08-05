@@ -1,6 +1,5 @@
 package me.modmuss50.optifabric.patcher;
 
-import me.modmuss50.optifabric.util.ASMUtils;
 import net.fabricmc.tinyremapper.IMappingProvider;
 import net.fabricmc.tinyremapper.MemberInstance;
 import org.objectweb.asm.tree.ClassNode;

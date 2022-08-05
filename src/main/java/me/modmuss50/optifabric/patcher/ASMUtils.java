@@ -1,4 +1,4 @@
-package me.modmuss50.optifabric.util;
+package me.modmuss50.optifabric.patcher;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.Validate;
