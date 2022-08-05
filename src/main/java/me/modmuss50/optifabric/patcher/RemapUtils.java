@@ -1,4 +1,4 @@
-package me.modmuss50.optifabric.util;
+package me.modmuss50.optifabric.patcher;
 
 import net.fabricmc.tinyremapper.IMappingProvider;
 import net.fabricmc.tinyremapper.OutputConsumerPath;

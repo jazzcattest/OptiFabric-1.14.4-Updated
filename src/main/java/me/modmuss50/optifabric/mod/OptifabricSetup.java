@@ -4,11 +4,10 @@ import com.chocohead.mm.api.ClassTinkerers;
 import me.modmuss50.optifabric.patcher.ClassCache;
 import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
-import net.fabricmc.loader.api.VersionParsingException;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.fabricmc.loader.util.version.SemanticVersionImpl;
 import net.fabricmc.loader.util.version.SemanticVersionPredicateParser;
-
+import net.fabricmc.loader.util.version.VersionParsingException;
 import org.apache.commons.lang3.tuple.Pair;
 import org.spongepowered.asm.mixin.Mixins;
 
@@ -18,7 +17,6 @@ import java.util.function.Predicate;
 
 @SuppressWarnings("unused")
 public class OptifabricSetup implements Runnable {
-	public static File optifineRuntimeJar = null;
 
 	//This is called early on to allow us to get the transformers in beofore minecraft starts
 	@Override
@@ -34,8 +32,6 @@ public class OptifabricSetup implements Runnable {
 
 			OptifineInjector injector = new OptifineInjector(runtime.getRight());
 			injector.setup();
-
-			optifineRuntimeJar = runtime.getLeft();
 		} catch (Throwable e) {
 			if(!OptifabricError.hasError()){
 				OptifineVersion.jarType = OptifineVersion.JarType.INCOMPATIBE;
@@ -47,15 +43,6 @@ public class OptifabricSetup implements Runnable {
 		if(FabricLoader.getInstance().isModLoaded("fabric-renderer-indigo")){
 			validateIndigoVersion();
 			Mixins.addConfiguration("optifabric.indigofix.mixins.json");
-		}
-
-		try {
-			if (FabricLoader.getInstance().isModLoaded("fabric-item-api-v1") && isVersionValid("fabric-item-api-v1", ">=1.1.0")) {
-				Mixins.addConfiguration("optifabric.compat.fabric-item-api.mixins.json");
-			}
-		} catch (VersionParsingException e) {
-			//Let's just gamble on the version not being valid so also not being a problem
-			e.printStackTrace();
 		}
 
 		Mixins.addConfiguration("optifabric.optifine.mixins.json");
