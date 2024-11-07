@@ -1,3 +1,5 @@
+TEST
+
 ## Important
 
 This fork of OptiFabric is solely meant to update the 1.14.4 release to properly work with connected textures, the latest [1.14 Fabric API](https://www.curseforge.com/minecraft/mc-mods/fabric-api/files/all?filter-game-version=1738749986%3A64806) and the latest [Fabric Loader](https://fabricmc.net/use/installer/).
